@@ -13,6 +13,11 @@ def inicial():
 @app.route('/login')
 def login():
     return render_template('login.html')
+
+
+@app.route('/registrar')
+def registrar():
+    return render_template('registrar.html')
    
 
 
