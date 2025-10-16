@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recuperar Senha - ReserveForClass</title>
+  <link rel="stylesheet" href="../static/css/recuperar.css">
+</head>
+<body>
+  <div class="container">
+    <div class="box">
+     
+      <h2>Recupere sua Senha</h2>
+
+      <form id="recuperarForm">
+        <div class="input-group">
+          <label for="email">E-mail cadastrado</label>
+          <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
+        </div>
+
+        <button type="submit">Enviar código</button>
+
+        <p class="back-text">
+          <a href="login.html">Voltar ao login</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("recuperarForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      alert("Um código de verificação foi enviado para: " + email);
+      window.location.href = "codigo.html";
+    });
+  </script>
+</body>
+</html>

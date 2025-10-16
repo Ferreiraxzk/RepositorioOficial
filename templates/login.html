@@ -6,24 +6,25 @@
   <title>Login - ReserveForClass</title>
   <link rel="stylesheet" href="../static/css/login.css">
 </head>
+
 <body>
   <div class="container">
     <div class="login-box">
-      <h1>ReserveForClass</h1>
-      <h2>Login</h2>
+     
+      <h2>Faça seu Login</h2>
       <form id="loginForm">
         <div class="input-group">
-          <label for="email">E-mail</label>
+          <label for="email">E-mail:</label>
           <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>
         </div>
 
         <div class="input-group">
-          <label for="senha">Senha</label>
+          <label for="senha">Senha:</label>
           <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
         </div>
 
         <div class="forgot">
-          <a href="#" id="forgotPassword">Esqueci minha senha</a>
+          <a href="recuperar.html" id="forgotPassword">Esqueci minha senha</a>
         </div>
 
         <button type="submit">Entrar</button>
@@ -39,6 +40,7 @@
     // Simulação de login
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const email = document.getElementById("email").value;
       const senha = document.getElementById("senha").value;
 
@@ -59,14 +61,6 @@
         }
       } catch (error) {
         alert("Erro de conexão com o servidor.");
-      }
-    });
-
-    // Simulação de recuperação de senha
-    document.getElementById("forgotPassword").addEventListener("click", () => {
-      const email = prompt("Digite o e-mail cadastrado para redefinir sua senha:");
-      if (email) {
-        alert("Um link de redefinição foi enviado para: " + email);
       }
     });
   </script>

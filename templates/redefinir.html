@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redefinir Senha - ReserveForClass</title>
+  <link rel="stylesheet" href="../static/css/redefinir.css">
+</head>
+<body>
+  <div class="container">
+    <div class="box">
+      
+      <h2>Redefine sua Senha</h2>
+
+      <form id="redefinirForm">
+        <div class="input-group">
+          <label for="senha">Nova Senha</label>
+          <input type="password" id="senha" name="senha" placeholder="Digite a nova senha" required>
+        </div>
+
+        <div class="input-group">
+          <label for="confirmar">Confirmar Senha</label>
+          <input type="password" id="confirmar" name="confirmar" placeholder="Confirme a senha" required>
+        </div>
+
+        <button type="submit">Salvar Nova Senha</button>
+
+        <p class="back-text">
+          <a href="login.html">Voltar ao login</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("redefinirForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const senha = document.getElementById("senha").value;
+      const confirmar = document.getElementById("confirmar").value;
+
+      if (senha.length < 6) {
+        alert("A senha deve ter pelo menos 6 caracteres.");
+        return;
+      }
+
+      if (senha !== confirmar) {
+        alert("As senhas não coincidem.");
+        return;
+      }
+
+      alert("Senha redefinida com sucesso!");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificação de Código - ReserveForClass</title>
+  <link rel="stylesheet" href="../static/css/codigo.css">
+</head>
+<body>
+  <div class="container">
+    <div class="box">
+      
+      <h2>Verificação de Código</h2>
+
+      <form id="codigoForm">
+        <div class="input-group">
+          <label for="codigo">Digite o código recebido</label>
+          <input type="text" id="codigo" name="codigo" placeholder="Ex: 123456" maxlength="6" required>
+        </div>
+
+        <button type="submit">Verificar Código</button>
+
+        <p class="back-text">
+          <a href="recuperar.html">Voltar</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("codigoForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const codigo = document.getElementById("codigo").value.trim();
+      if (codigo === "123456" || codigo.length === 6) {
+        alert("Código verificado com sucesso!");
+        window.location.href = "redefinir.html";
+      } else {
+        alert("Código inválido. Tente novamente.");
+      }
+    });
+  </script>
+</body>
+</html>
