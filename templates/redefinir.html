@@ -14,19 +14,19 @@
 
       <form id="redefinirForm">
         <div class="input-group">
-          <label for="senha">Nova Senha</label>
+          <label for="senha">Nova Senha:</label>
           <input type="password" id="senha" name="senha" placeholder="Digite a nova senha" required>
         </div>
 
         <div class="input-group">
-          <label for="confirmar">Confirmar Senha</label>
+          <label for="confirmar">Confirmar Senha:</label>
           <input type="password" id="confirmar" name="confirmar" placeholder="Confirme a senha" required>
         </div>
 
         <button type="submit">Salvar Nova Senha</button>
 
         <p class="back-text">
-          <a href="login.html">Voltar ao login</a>
+          <a href="/login">Voltar ao login</a>
         </p>
       </form>
     </div>
@@ -49,7 +49,7 @@
       }
 
       alert("Senha redefinida com sucesso!");
-      window.location.href = "login.html";
+      window.location.href = "/login";
     });
   </script>
 </body>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 
 app=Flask(__name__)
 
@@ -18,6 +18,22 @@ def login():
 @app.route('/registrar')
 def registrar():
     return render_template('registrar.html')
+
+
+
+@app.route('/recuperar')
+def recuperar():
+    return render_template('recuperar.html')
+
+
+@app.route('/redefinir')
+def redefinir():
+    return render_template('redefinir.html')
+
+
+@app.route('/codigo')
+def codigo():
+    return render_template('codigo.html')
    
 
 
