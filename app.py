@@ -34,6 +34,10 @@ def redefinir():
 @app.route('/codigo')
 def codigo():
     return render_template('codigo.html')
+
+@app.route('/inicio')
+def inicio():
+    return render_template('inicio.html')
    
 
 

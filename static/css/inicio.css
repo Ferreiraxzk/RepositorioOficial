@@ -1,0 +1,230 @@
+:root {
+  --roxo-escuro: #3b1d8f;
+  --roxo-medio: #5125ad;
+  --roxo-claro: #8b51f5;
+  --branco: #ffffff;
+  --cinza-texto: #444;
+  --cinza-claro: #f8f6ff;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: var(--cinza-claro);
+  color: var(--cinza-texto);
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 14px 60px;
+  background: rgba(59, 29, 143, 0.85);
+  backdrop-filter: blur(10px);
+  color: var(--branco);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  height: 65px;
+  width: auto;
+  filter: brightness(0) invert(1);
+}
+
+/* Menu Buttons */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-btn {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--roxo-claro);
+  padding: 8px 20px;
+  border-radius: 25px;
+  border: 2px solid var(--roxo-medio);
+  transition: all 0.3s ease;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+  background: var(--roxo-medio);
+  transform: scale(1.05);
+}
+
+/* Hero */
+.hero.full {
+  background: linear-gradient(135deg, var(--roxo-escuro), var(--roxo-medio));
+  color: var(--branco);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 120px 40px 80px;
+  position: relative;
+}
+
+.hero-content h2 {
+  font-size: 2.7rem;
+  font-weight: 700;
+  max-width: 900px;
+  margin: 0 auto 20px;
+}
+
+.hero-content h2 span {
+  color: var(--roxo-claro);
+}
+
+.hero-content p {
+  font-size: 1.1rem;
+  color: #e8e8e8;
+  max-width: 700px;
+  margin: 0 auto 40px;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn {
+  text-decoration: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.btn.primary {
+  background: var(--roxo-claro);
+  color: white;
+}
+
+.btn.secondary {
+  background: transparent;
+  border: 2px solid var(--roxo-claro);
+  color: white;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(139, 81, 245, 0.4);
+}
+
+/* Scroll Indicator */
+.scroll-down {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  animation: bounce 2s infinite;
+}
+
+.scroll-down span {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-bottom: 3px solid white;
+  border-right: 3px solid white;
+  transform: rotate(45deg);
+  margin-bottom: 10px;
+}
+
+.scroll-down p {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 10px); }
+}
+/* Steps */
+.steps {
+  padding: 100px 60px;
+  background: var(--cinza-claro);
+  text-align: center;
+}
+
+.steps h3 {
+  font-size: 2rem;
+  color: var(--roxo-medio);
+  margin-bottom: 60px;
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px;
+}
+
+.step-card {
+  background: var(--branco);
+  border-radius: 20px;
+  padding: 40px 25px;
+  box-shadow: 0 6px 20px rgba(59, 29, 143, 0.08);
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.step-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(81, 37, 173, 0.2);
+}
+
+.step-card i {
+  font-size: 60px;
+  color: var(--roxo-medio);
+  margin-bottom: 20px;
+}
+
+.step-card p {
+  font-size: 1rem;
+  color: var(--cinza-texto);
+  font-weight: 500;
+}
+
+/* Footer */
+footer {
+  background: var(--roxo-escuro);
+  color: var(--branco);
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+}
+
+/* Animation visible on scroll */
+.step-visible {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  transition: all 0.6s ease;
+}

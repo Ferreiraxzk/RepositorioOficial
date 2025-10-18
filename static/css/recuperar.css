@@ -85,3 +85,28 @@ button:hover {
 .back-text a:hover {
   text-decoration: underline;
 }
+
+/* Cabeçalho com logo e botão de voltar */
+.topo-navegacao {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1000;
+}
+
+/* Botão de voltar */
+.back-btn {
+  background: #8B51F5;
+  border: none;
+  font-size: 22px;
+  color: #3B1D8F; /* use #fff se o fundo for escuro */
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  color: #fff;
+}
