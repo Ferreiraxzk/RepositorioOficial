@@ -6,20 +6,19 @@
   <title>Login - ReserveForClass</title>
   <link rel="stylesheet" href="../static/css/login.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 </head>
 <body>
 
   <header class="topo-navegacao">
-  <button class="back-btn" onclick="history.back()">
-    <i class="fa-solid fa-arrow-left"></i>
-  </button>
+    <button class="back-btn" onclick="history.back()">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
   </header>
 
   <div class="container">
     <div class="login-box">
-     
       <h2>Faça seu Login</h2>
+
       <form id="loginForm">
         <div class="input-group">
           <label for="email">E-mail:</label>
@@ -35,6 +34,7 @@
           <a href="/recuperar" id="forgotPassword">Esqueci minha senha</a>
         </div>
 
+        
         <button type="submit">Entrar</button>
 
         <p class="register-text">
@@ -45,7 +45,7 @@
   </div>
 
   <script>
-    // Simulação de login
+    // Simulação de login (com redirecionamento para /inicio)
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -62,8 +62,8 @@
         const data = await response.json();
 
         if (response.ok) {
-          alert("Login realizado com sucesso!");
-          window.location.href = "index.html";
+          // Sucesso → redireciona para a rota /inicio
+          window.location.href = "/inicio";
         } else {
           alert("Falha no login: " + (data.error || "Verifique suas credenciais."));
         }
@@ -72,5 +72,6 @@
       }
     });
   </script>
+
 </body>
 </html>
