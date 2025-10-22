@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Agendar Chromebook | ReserveForClass</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Fonte -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../static/css/agendar.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-left">
+      <img src="../static/assets/img/logo branca.png" alt="ReserveForClass" class="logo" />
+      <h1>ReserveForClass</h1>
+    </div>
+
+    <nav class="nav-links">
+      <a href="/inicio" class="nav-btn"><i class="fa-solid fa-house"></i> Início</a>
+      <a href="/agendar" class="nav-btn active"><i class="fa-solid fa-calendar-plus"></i> Agendar</a>
+      <a href="/meusagendamentos" class="nav-btn"><i class="fa-solid fa-list-check"></i> Meus Agendamentos</a>
+      <a href="/escola" class="nav-btn"><i class="fa-solid fa-school"></i> Escola</a>
+      <button id="openConfig" class="nav-btn"><i class="fa-solid fa-gear"></i> Configurações</button>
+    </nav>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="container">
+    <button class="btn-voltar" onclick="history.back()" aria-label="Voltar">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+
+    <section class="form-card">
+      <h2><i class="fa-solid fa-calendar-plus"></i> Agendar Chromebook</h2>
+
+      <form id="agendarForm">
+        <label>Professor</label>
+        <input type="text" id="professor" placeholder="Digite o nome do professor" required>
+
+        <label>Turma</label>
+        <select id="turma" required>
+          <option value="">Selecione a turma</option>
+          <option>6º A</option>
+          <option>6º B</option>
+          <option>7º A</option>
+          <option>7º B</option>
+          <option>8º A</option>
+          <option>8º B</option>
+          <option>9º A</option>
+          <option>9º B</option>
+        </select>
+
+        <label>Data</label>
+        <input type="date" id="data" required>
+
+        <label>Horário</label>
+        <select id="horario" required>
+          <option value="">Selecione o horário</option>
+          <option>07:00 - 08:00</option>
+          <option>08:00 - 09:00</option>
+          <option>09:00 - 10:00</option>
+          <option>10:00 - 11:00</option>
+          <option>13:00 - 14:00</option>
+          <option>14:00 - 15:00</option>
+          <option>15:00 - 16:00</option>
+        </select>
+
+        <label>Quantidade</label>
+        <input type="number" id="quantidade" min="1" max="35" value="1" required>
+
+        <button type="submit" class="btn primary full"><i class="fa-solid fa-check"></i> Confirmar agendamento</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- PAINEL DE CONFIGURAÇÕES -->
+  <aside id="configPanel" class="config-panel" aria-hidden="true">
+    <div class="panel-head">
+      <h2><i class="fa-solid fa-sliders"></i> Configurações</h2>
+      <button id="closeConfig" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="panel-body">
+      <div class="panel-group">
+        <h4>Aparência</h4>
+
+        <div class="config-item">
+          <div><strong>Modo noturno</strong><br><small>Economiza energia e reduz iluminação.</small></div>
+          <label class="switch"><input type="checkbox" id="toggleDark"><span class="slider"></span></label>
+        </div>
+
+        <div class="config-item">
+          <div><strong>Alto contraste</strong><br><small>Melhora legibilidade.</small></div>
+          <label class="switch"><input type="checkbox" id="toggleContrast"><span class="slider"></span></label>
+        </div>
+
+        <div class="config-item">
+          <div><strong>Desativar animações</strong><br><small>Reduz movimento para acessibilidade.</small></div>
+          <label class="switch"><input type="checkbox" id="toggleReduceMotion"><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="panel-group">
+        <h4>Sistema</h4>
+        <div class="config-item">
+          <div><strong>Notificações por e-mail</strong><br><small>Receba atualizações de reserva.</small></div>
+          <label class="switch"><input type="checkbox" id="toggleNotifications" checked><span class="slider"></span></label>
+        </div>
+      </div>
+      <!-- Feedback -->
+      <div class="panel-group">
+        <h4>Feedback</h4>
+
+        <label class="label-small">Seu nome (opcional)</label>
+        <input type="text" id="fbName" placeholder="Seu nome">
+
+        <label class="label-small">Seu e-mail (opcional)</label>
+        <input type="email" id="fbEmail" placeholder="seu@exemplo.com">
+
+        <label class="label-small">Mensagem</label>
+        <textarea id="fbMessage" maxlength="300" placeholder="Nos conte sua sugestão ou problema..."></textarea>
+        <div class="fb-row">
+          <small id="charCount">0 / 300</small>
+          <button id="sendFeedback" class="btn small"><i class="fa-solid fa-paper-plane"></i> Enviar</button>
+        </div>
+
+        <div id="fbStatus" class="fb-status" aria-live="polite"></div>
+      </div>
+    </div>
+
+      <div class="panel-footer">
+        <small>Suporte: <a href="mailto:suporte@reserveforclass.com">suporte@reserveforclass.com</a></small>
+      </div>
+    </div>
+  </aside>
+
+  <div id="overlay" class="overlay"></div>
+  <div id="toast" class="toast"></div>
+
+  <!-- JS -->
+  <script src="../static/js/agendar.js"></script>
+</body>
+</html>

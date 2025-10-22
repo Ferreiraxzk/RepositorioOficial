@@ -39,7 +39,9 @@ def codigo():
 def inicio():
     return render_template('inicio.html')
    
-
+@app.route('/agendar')
+def agendar():
+    return render_template('agendar.html')
 
 
 if __name__ == '__main__':
