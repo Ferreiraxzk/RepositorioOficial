@@ -43,6 +43,10 @@ def inicio():
 def agendar():
     return render_template('agendar.html')
 
+@app.route('/meusagendamentos')
+def meusagendamentos():
+    return render_template('meusagendamentos.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
