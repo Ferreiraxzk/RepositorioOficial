@@ -40,26 +40,5 @@
       </form>
     </div>
   </div>
-
-  <script>
-    document.getElementById("redefinirForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const senha = document.getElementById("senha").value;
-      const confirmar = document.getElementById("confirmar").value;
-
-      if (senha.length < 6) {
-        alert("A senha deve ter pelo menos 6 caracteres.");
-        return;
-      }
-
-      if (senha !== confirmar) {
-        alert("As senhas não coincidem.");
-        return;
-      }
-
-      alert("Senha redefinida com sucesso!");
-      window.location.href = "/login";
-    });
-  </script>
 </body>
 </html>

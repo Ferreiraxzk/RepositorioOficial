@@ -43,35 +43,5 @@
       </form>
     </div>
   </div>
-
-  <script>
-    // Simulação de login (com redirecionamento para /inicio)
-    document.getElementById("loginForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const email = document.getElementById("email").value;
-      const senha = document.getElementById("senha").value;
-
-      try {
-        const response = await fetch("https://reqres.in/api/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password: senha }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          // Sucesso → redireciona para a rota /inicio
-          window.location.href = "/inicio";
-        } else {
-          alert("Falha no login: " + (data.error || "Verifique suas credenciais."));
-        }
-      } catch (error) {
-        alert("Erro de conexão com o servidor.");
-      }
-    });
-  </script>
-
 </body>
 </html>
