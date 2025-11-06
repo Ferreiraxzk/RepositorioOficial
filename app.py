@@ -1,15 +1,11 @@
 from flask import Flask, render_template, request
 from flask import redirect, url_for, flash, session
 import os
-from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 
-app=Flask(__name__,
-          static_folder='assets',
-          static_url_path='/assets',
-          template_folder='templates')
+app=Flask(__name__)
 
 app.config['SECRET_KEY'] = 'dev-secret-key'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -19,11 +15,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
 )
 
 
-db=-SQLAlchemy(app)
+db=SQLAlchemy(app)
 
-class Usuario(db.model):
+class Usuario(db.Model):
     __tablename__='usuarios'
-    id = db.Column(db.integer, primary_key=True, unique=True, nullable=False,autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False,autoincrement=True)
     nome= db.Column(db.String(100), nullable=False)
     email= db.Column(db.String(100), nullable=False, unique=True)
     senha= db.Column(db.String(50), nullable=False)
@@ -38,6 +34,15 @@ def registrarUsuario():
     senha = (request.form.get('senha') or '').strip()
     login = (request.form.get('login') or '').strip()
   
+    if not login or not nome:
+        flash('Campos obrigatórios: login e nome', 'warning')
+        return redirect(url_for('login'))
+
+    
+    # Verifica se a senha foi informada para o cadastro
+    if not senha:
+        flash('Informe uma senha para cadastrar', 'warning')
+        return redirect(url_for('login'))
 
     try:
         u = Usuario(login=login, nome=nome, email=email, senha=senha)
@@ -55,18 +60,48 @@ def registrarUsuario():
         return redirect(url_for('login'))
 
 
+# 2 - Rota que autentica o login usuário (Recebe os dados de um fomrulário HTML)
+@app.route('/login', methods=['POST'])
+def login():
+    login = (request.form.get('login') or '').strip()
+    senha = (request.form.get('senha') or '')
+
+    # Validação para verificar seo login foi digitado
+    if not login or not senha:
+        flash('Informe login e senha', 'warning')
+        return redirect(url_for('login'))
+    
+    # Analise no banco para ver se login e senha estão na mesma linha
+    user = Usuario.query.filter_by(login=login).first()
+    if not user:
+        flash('Login não encontrado', 'danger')
+        return redirect(url_for('login'))
+    if not user.senha:
+        flash('Usuário sem senha cadastrada', 'danger')
+        return redirect(url_for('login'))
+    if user.senha != senha:
+        flash('Senha inválida', 'danger')
+        return redirect(url_for('login'))
+    # Cria a sessão para o usuário informado
+    session['usuario_id'] = user.id
+    flash(f'Bem-vindo(a), {user.nome}!', 'success')
+    return redirect(url_for('inicio'))
+
+# Logout: limpa sessão e volta para a página de acesso
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    # Destruição da sessão
+    session.pop('usuario_id', None)
+    flash('Você saiu da sessão.', 'info')
+    return redirect(url_for('index'))
+
 
 
 @app.route('/')
 def inicial():
     return render_template('index.html')
    
-
-
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
 
 @app.route('/registrar')
 def registrar():
