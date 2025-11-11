@@ -19,7 +19,8 @@
     <div class="login-box">
       <h2>Faça seu Login</h2>
 
-      <form id="loginForm">
+      <form id="loginForm" method="POST" action="{{ url_for('login') }}">
+
         <div class="input-group">
           <label for="email">E-mail:</label>
           <input type="email" id="email" name="email" placeholder="Digite seu e-mail" required>

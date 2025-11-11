@@ -18,8 +18,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
 db=SQLAlchemy(app)
 
 class Usuario(db.Model):
-    __tablename__='usuarios'
-    id = db.Column(db.Integer, primary_key=True, unique=True, nullable=False,autoincrement=True)
+    __tablename__='usuario'
+    IDusuario = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nome= db.Column(db.String(100), nullable=False)
     email= db.Column(db.String(100), nullable=False, unique=True)
     senha= db.Column(db.String(50), nullable=False)
@@ -33,61 +33,51 @@ def registrarUsuario():
     email = (request.form.get('email') or '').strip()
     senha = (request.form.get('senha') or '').strip()
     login = (request.form.get('login') or '').strip()
-  
+
+    print(f"[DEBUG] Recebido: nome={nome}, email={email}, login={login}")
+
     if not login or not nome:
         flash('Campos obrigatórios: login e nome', 'warning')
-        return redirect(url_for('login'))
+        return redirect(url_for('registrar'))
 
-    
-    # Verifica se a senha foi informada para o cadastro
     if not senha:
         flash('Informe uma senha para cadastrar', 'warning')
-        return redirect(url_for('login'))
+        return redirect(url_for('registrar'))
 
     try:
         u = Usuario(login=login, nome=nome, email=email, senha=senha)
         db.session.add(u)
         db.session.commit()
+        print("[DEBUG] Usuário inserido com sucesso!")
         flash('Conta criada com sucesso!', 'success')
-        return redirect(url_for('login'))
-    except IntegrityError:
+        return redirect(url_for('login_page'))
+    except IntegrityError as e:
         db.session.rollback()
+        print(f"[DEBUG] IntegrityError: {e}")
         flash('Login já cadastrado', 'danger')
-        return redirect(url_for('login'))
+        return redirect(url_for('registrar'))
     except Exception as e:
         db.session.rollback()
+        print(f"[DEBUG] Erro geral: {e}")
         flash(f'Erro ao cadastrar: {str(e)}', 'danger')
-        return redirect(url_for('login'))
+        return redirect(url_for('registrar'))
 
 
-# 2 - Rota que autentica o login usuário (Recebe os dados de um fomrulário HTML)
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    login = (request.form.get('login') or '').strip()
-    senha = (request.form.get('senha') or '')
-
-    # Validação para verificar seo login foi digitado
-    if not login or not senha:
-        flash('Informe login e senha', 'warning')
-        return redirect(url_for('login'))
+    if request.method == 'POST':
+        email = request.form.get('email')
+        senha = request.form.get('senha')
+        
+        user = Usuario.query.filter_by(email=email).first()
+        if user and user.senha == senha:
+            # login bem-sucedido, redireciona
+            return redirect(url_for('inicio'))  
+        else:
+            return render_template('login.html', erro="Email ou senha incorretos")
     
-    # Analise no banco para ver se login e senha estão na mesma linha
-    user = Usuario.query.filter_by(login=login).first()
-    if not user:
-        flash('Login não encontrado', 'danger')
-        return redirect(url_for('login'))
-    if not user.senha:
-        flash('Usuário sem senha cadastrada', 'danger')
-        return redirect(url_for('login'))
-    if user.senha != senha:
-        flash('Senha inválida', 'danger')
-        return redirect(url_for('login'))
-    # Cria a sessão para o usuário informado
-    session['usuario_id'] = user.id
-    flash(f'Bem-vindo(a), {user.nome}!', 'success')
-    return redirect(url_for('inicio'))
+    return render_template('login.html')
 
-# Logout: limpa sessão e volta para a página de acesso
 
 @app.route('/logout', methods=['GET'])
 def logout():
@@ -101,6 +91,9 @@ def logout():
 @app.route('/')
 def inicial():
     return render_template('index.html')
+
+
+
    
 
 @app.route('/registrar')
