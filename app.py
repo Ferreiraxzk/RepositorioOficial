@@ -84,7 +84,7 @@ def logout():
     # Destruição da sessão
     session.pop('usuario_id', None)
     flash('Você saiu da sessão.', 'info')
-    return redirect(url_for('index'))
+    return redirect(url_for('index.html'))
 
 
 
