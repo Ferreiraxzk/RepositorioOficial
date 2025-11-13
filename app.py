@@ -4,6 +4,8 @@ import os
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
+from datetime import date,time
+
 
 app=Flask(__name__)
 
@@ -27,6 +29,35 @@ class Usuario(db.Model):
     
 
 
+
+class Kits(db.Model):
+    __tablename__='kits_chromebooks'
+    IDchromebooks = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
+    modelos= db.Column(db.String(50), nullable=False, unique=True)
+    
+
+
+
+
+
+#class Agendamento(db.Model):
+    ##IDagendamentos = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    #IDusuario = db.Column(db.Integer, db.ForeignKey('usuario.IDusuario'), nullable=False)  
+    #IDchromebooks = db.Column(db.Integer, db.ForeignKey('kits_chromebooks.IDchromebooks'), nullable=False)  
+    #professor = db.Column(db.String(45), nullable=False)
+    #turma = db.Column(db.String(10), nullable=False, unique=True)  
+    #data = db.Column(db.Date, nullable=False)
+    #horario = db.Column(db.Time, nullable=False, unique=True)  
+    #quantidade = db.Column(db.Integer, nullable=False)  
+
+
+
+
+
+
+
+
+
 @app.route('/usuarios/registrar', methods=['POST'])
 def registrarUsuario():
     nome = (request.form.get('nome') or '').strip()
@@ -35,7 +66,7 @@ def registrarUsuario():
     login = (request.form.get('login') or '').strip()
 
     print(f"[DEBUG] Recebido: nome={nome}, email={email}, login={login}")
-
+        
     if not login or not nome:
         flash('Campos obrigatórios: login e nome', 'warning')
         return redirect(url_for('registrar'))
@@ -63,6 +94,8 @@ def registrarUsuario():
         return redirect(url_for('registrar'))
 
 
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -71,7 +104,7 @@ def login():
         
         user = Usuario.query.filter_by(email=email).first()
         if user and user.senha == senha:
-            # login bem-sucedido, redireciona
+           
             return redirect(url_for('inicio'))  
         else:
             return render_template('login.html', erro="Email ou senha incorretos")
@@ -81,20 +114,23 @@ def login():
 
 @app.route('/logout', methods=['GET'])
 def logout():
-    # Destruição da sessão
+   
     session.pop('usuario_id', None)
     flash('Você saiu da sessão.', 'info')
     return redirect(url_for('index.html'))
 
 
 
+
+
+
+#SEÇÃO DE ROTAS_________________________________________________________________________
+
 @app.route('/')
 def inicial():
     return render_template('index.html')
 
 
-
-   
 
 @app.route('/registrar')
 def registrar():
@@ -124,9 +160,24 @@ def inicio():
 def agendar():
     return render_template('agendar.html')
 
+
+
 @app.route('/meusagendamentos')
 def meusagendamentos():
     return render_template('meusagendamentos.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
