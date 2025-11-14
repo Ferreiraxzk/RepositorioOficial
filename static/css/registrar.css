@@ -102,7 +102,7 @@ button:hover {
   background: #3B1D8F;
   border: none;
   font-size: 22px;
-  color: #fff; /* use #fff se o fundo for escuro */
+  color: #fff; 
   cursor: pointer;
   transition: 0.3s;
 }

@@ -27,6 +27,7 @@
       <a href="/inicio" class="nav-btn active"><i class="fa-solid fa-house"></i> Início</a>
       <a href="/agendar" class="nav-btn"><i class="fa-solid fa-calendar-plus"></i> Agendar</a>
       <a href="/meusagendamentos" class="nav-btn"><i class="fa-solid fa-list-check"></i> Meus Agendamentos</a>
+      <a href="/kits" class="nav-btn"><i class="fa-solid fa-laptop"></i> Kits</a>
       <button id="openConfig" class="nav-btn" aria-haspopup="true" aria-controls="configPanel">
         <i class="fa-solid fa-gear"></i> Configurações
       </button>
@@ -34,10 +35,13 @@
     </nav>
   </header>
 
+
+
+
   
   <section class="hero full" id="hero">
     <div class="hero-content">
-      <h2>Bem-vindo ao sistema de agendamento <span>ReserveForClass</span></h2>
+      <h2>Bem-vindo {{ session.get('nome') }} ao sistema de agendamento <span>ReserveForClass</span></h2>
       <p>Organize o uso dos Chromebooks de forma inteligente, simples e rápida. Escolha a turma, o dia e o horário — tudo em um só lugar.</p>
 
       <div class="hero-buttons">

@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request
 from flask import redirect, url_for, flash, session
+from functools import wraps
 import os
+from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
+from sqlalchemy import func, text
 from sqlalchemy.exc import IntegrityError
-from datetime import date,time
-
 
 app=Flask(__name__)
 
@@ -17,6 +17,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
 )
 
 
+
+
+
 db=SQLAlchemy(app)
 
 class Usuario(db.Model):
@@ -26,19 +29,12 @@ class Usuario(db.Model):
     email= db.Column(db.String(100), nullable=False, unique=True)
     senha= db.Column(db.String(50), nullable=False)
     login= db.Column(db.String(45), unique=True, nullable=False)
-    
-
-
 
 class Kits(db.Model):
     __tablename__='kits_chromebooks'
-    IDchromebooks = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
-    modelos= db.Column(db.String(50), nullable=False, unique=True)
-    
-
-
-
-
+    idchromebooks = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
+    nome= db.Column(db.String(25), nullable=False)
+    quantidade= db.Column(db.Integer, nullable=False)
 
 #class Agendamento(db.Model):
     ##IDagendamentos = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -53,11 +49,27 @@ class Kits(db.Model):
 
 
 
+#FUNÇÃO QUE SÓ PERMITE ADMINISTRADORES
+def admin_required(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        uid = session.get('usuario_id')
+        if not uid:
+            flash('Faça login para continuar.', 'warning')
+            return redirect(url_for('login'))
+        user = Usuario.query.get(uid)
+        # Exige que o usuário seja 'adm' e que a senha cadastrada também seja 'adm'
+        if not user or user.login != 'adm' or user.senha != 'adm':
+            flash('Acesso restrito ao administrador.', 'danger')
+            return redirect(url_for('home'))
+        return f(*args, **kwargs)
+    return wrapper
 
 
 
 
 
+#CADASTRAR USUARIOS_____________________________
 @app.route('/usuarios/registrar', methods=['POST'])
 def registrarUsuario():
     nome = (request.form.get('nome') or '').strip()
@@ -81,7 +93,7 @@ def registrarUsuario():
         db.session.commit()
         print("[DEBUG] Usuário inserido com sucesso!")
         flash('Conta criada com sucesso!', 'success')
-        return redirect(url_for('login_page'))
+        return redirect(url_for('login'))
     except IntegrityError as e:
         db.session.rollback()
         print(f"[DEBUG] IntegrityError: {e}")
@@ -94,8 +106,37 @@ def registrarUsuario():
         return redirect(url_for('registrar'))
 
 
+#CADASTRAR KITS_____________________________
+@app.route('/registrar/kits', methods=['POST'])
+def CadastrarKit():
+    nome = (request.form.get('lote') or '').strip()
+    quantidade = (request.form.get('quantidade_kit') or '').strip()
+
+    print(f"[DEBUG] Recebido: lote={nome}, quantidade_kit={quantidade}")
+
+    if not nome or not quantidade:
+        flash('Campos obrigatórios: nome e quantidade', 'warning')
+        return redirect(url_for('kits'))
+
+    try:
+        novo_kit = Kits(nome=nome, quantidade=int(quantidade))
+        db.session.add(novo_kit)
+        db.session.commit()
+
+        print("[DEBUG] Kit inserido com sucesso!")
+        flash('Kit criado com sucesso!', 'success')
+        return redirect(url_for('inicio'))
+
+    except Exception as e:
+        db.session.rollback()
+        print(f"[DEBUG] Erro geral: {e}")
+        flash(f'Erro ao cadastrar: {str(e)}', 'danger')
+        return redirect(url_for('inicio'))
 
 
+
+
+#VALIDAR LOGIN_____________________________
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -103,8 +144,10 @@ def login():
         senha = request.form.get('senha')
         
         user = Usuario.query.filter_by(email=email).first()
+        session['nome'] = user.login
         if user and user.senha == senha:
-           
+        
+
             return redirect(url_for('inicio'))  
         else:
             return render_template('login.html', erro="Email ou senha incorretos")
@@ -112,12 +155,13 @@ def login():
     return render_template('login.html')
 
 
+#ROTA PARA FAZER BUTÃO SAIR DESLOGAR_____________________________
 @app.route('/logout', methods=['GET'])
 def logout():
-   
-    session.pop('usuario_id', None)
+    session.pop('IDusuario', None)
     flash('Você saiu da sessão.', 'info')
-    return redirect(url_for('index.html'))
+    return redirect(url_for('inicial'))
+                            #pega função inicial da rota '/'
 
 
 
@@ -125,10 +169,14 @@ def logout():
 
 
 #SEÇÃO DE ROTAS_________________________________________________________________________
-
 @app.route('/')
 def inicial():
     return render_template('index.html')
+
+
+@app.route('/kits')
+def kit():
+    return render_template('kits.html')
 
 
 

@@ -2,51 +2,61 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meus Agendamentos | ReserveForClass</title>
-  <link rel="stylesheet" href="../static/css/meusagendamentos.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cadastrar Kits| ReserveForClass</title>
+
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Fonte -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../static/css/kits.css">
 </head>
 <body>
 
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="nav-left">
-      <img src="../static/assets/img/logo branca.png" class="logo" alt="Logo">
+      <img src="../static/assets/img/logo branca.png" alt="ReserveForClass" class="logo" />
       <h1>ReserveForClass</h1>
     </div>
+
     <nav class="nav-links">
       <a href="/inicio" class="nav-btn"><i class="fa-solid fa-house"></i> Início</a>
       <a href="/agendar" class="nav-btn"><i class="fa-solid fa-calendar-plus"></i> Agendar</a>
-      <a href="/meusagendamentos" class="nav-btn active"><i class="fa-solid fa-list-check"></i> Meus Agendamentos</a>
-      <a href="/kits" class="nav-btn"><i class="fa-solid fa-laptop"></i> Kits</a>
-      
+      <a href="/meusagendamentos" class="nav-btn"><i class="fa-solid fa-list-check"></i> Meus Agendamentos</a>
+      <a href="/kits" class="nav-btn active"><i class="fa-solid fa-laptop"></i> Kits</a>
       <button id="openConfig" class="nav-btn"><i class="fa-solid fa-gear"></i> Configurações</button>
     </nav>
   </header>
 
 
   <main class="container">
-    <button class="btn-voltar" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></button>
+    <button class="btn-voltar" onclick="history.back()" aria-label="Voltar">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
 
-    <section class="agendamentos-card">
-      <h2><i class="fa-solid fa-list-check"></i> Meus Agendamentos</h2>
-
-      <div class="botoes-acoes">
-        <button class="btn novo" onclick="novoAgendamento()">
-          <i class="fa-solid fa-plus"></i> Novo Agendamento
-        </button>
-        <button class="btn excluir" onclick="excluirTodos()">
-          <i class="fa-solid fa-trash"></i> Excluir Todos
-        </button>
-      </div>
-
-      <div id="listaAgendamentos" class="lista-agendamentos">
-        <p class="vazio">Nenhum agendamento cadastrado.</p>
-      </div>
-    </section>
+    <section class="form-card">
+        <h2><i class="fa-solid fa-laptop"></i> Cadastrar Kits</h2>
+      
+        <form action="/registrar/kits" method="POST">
+          
+          <label>Nome:</label>
+          <input type="text" id="lote" name="lote" placeholder="Digite o nome do lote" required>
+      
+          <label>Quantidade:</label>
+          <input type="number" id="quantidade_kit" name="quantidade_kit" min="1" max="35" value="1" required>
+      
+          <button type="submit" class="btn primary full">
+            <i class="fa-solid fa-check"></i> cadastrar kit
+          </button>
+        </form>
+      </section>
+      
   </main>
+
 
   <aside id="configPanel" class="config-panel" aria-hidden="true">
     <div class="panel-head">
@@ -81,7 +91,7 @@
           <label class="switch"><input type="checkbox" id="toggleNotifications" checked><span class="slider"></span></label>
         </div>
       </div>
-    
+  
       <div class="panel-group">
         <h4>Feedback</h4>
 
@@ -94,7 +104,7 @@
         <label class="label-small">Mensagem</label>
         <textarea id="fbMessage" maxlength="300" placeholder="Nos conte sua sugestão ou problema..."></textarea>
         <div class="fb-row">
-          <small id="charCount">0 / 300</small>
+          <small id="charCount">Limite de 300 caracteres</small>
           <button id="sendFeedback" class="btn small"><i class="fa-solid fa-paper-plane"></i> Enviar</button>
         </div>
 
@@ -111,6 +121,7 @@
   <div id="overlay" class="overlay"></div>
   <div id="toast" class="toast"></div>
 
-  <script src="../static/js/meusagendamentos.js"></script>
+  
+  <script src="../static/js/kits.js"></script>
 </body>
 </html>

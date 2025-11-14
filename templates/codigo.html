@@ -33,18 +33,5 @@
       </form>
     </div>
   </div>
-
-  <script>
-    document.getElementById("codigoForm").addEventListener("submit", (e) => {
-      e.preventDefault();
-      const codigo = document.getElementById("codigo").value.trim();
-      if (codigo === "123456" || codigo.length === 6) {
-        alert("Código verificado com sucesso!");
-        window.location.href = "/redefinir";
-      } else {
-        alert("Código inválido. Tente novamente.");
-      }
-    });
-  </script>
 </body>
 </html>
