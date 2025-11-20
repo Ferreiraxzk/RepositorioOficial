@@ -28,26 +28,64 @@
 
 
   <main class="container">
-    <button class="btn-voltar" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i></button>
+
+    <button class="btn-voltar" onclick="history.back()">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
 
     <section class="agendamentos-card">
       <h2><i class="fa-solid fa-list-check"></i> Meus Agendamentos</h2>
 
+      <!-- BOTÃO NOVO AGENDAMENTO -->
       <div class="botoes-acoes">
-        <button class="btn novo" onclick="novoAgendamento()">
+        <a href="/agendar" class="btn">
           <i class="fa-solid fa-plus"></i> Novo Agendamento
-        </button>
-        <button class="btn excluir" onclick="excluirTodos()">
-          <i class="fa-solid fa-trash"></i> Excluir Todos
-        </button>
+        </a>
       </div>
 
-      <div id="listaAgendamentos" class="lista-agendamentos">
-        <p class="vazio">Nenhum agendamento cadastrado.</p>
+      <div class="lista-agendamentos">
+        {% if agendamentos|length == 0 %}
+          <p class="vazio">Nenhum agendamento cadastrado.</p>
+        {% else %}
+          {% for a in agendamentos %}
+            <div class="agendamento-item">
+              
+              <h3>
+                <i class="fa-solid fa-chalkboard-user"></i>
+                {{ a.professor }}
+              </h3>
+
+              <p><strong>Turma:</strong> {{ a.turma }}</p>
+
+              <p><strong>Data:</strong> {{ a.data.strftime('%d/%m/%Y') }}</p>
+
+              <p><strong>Horário:</strong>
+                {{ a.horario_inicio.strftime('%H:%M') }} -
+                {{ a.horario_fim.strftime('%H:%M') }}
+              </p>
+
+              <p><strong>Quantidade:</strong> {{ a.quantidade }}</p>
+
+              <p><strong>Kit:</strong> {{ a.kit.nome }}</p>
+
+              <!-- BOTÃO EXCLUIR -->
+              <form action="/agendamento/excluir/{{ a.IDagendamentos }}" method="POST"
+                onsubmit="return confirm('Deseja realmente excluir este agendamento?');">
+                <button class="btn excluir" type="submit">
+                  <i class="fa-solid fa-trash"></i> Excluir
+                </button>
+              </form>
+
+            </div>
+          {% endfor %}
+        {% endif %}
       </div>
     </section>
+
   </main>
 
+
+  <!-- MENU LATERAL -->
   <aside id="configPanel" class="config-panel" aria-hidden="true">
     <div class="panel-head">
       <h2><i class="fa-solid fa-sliders"></i> Configurações</h2>
@@ -55,19 +93,17 @@
     </div>
 
     <div class="panel-body">
+
       <div class="panel-group">
         <h4>Aparência</h4>
-
         <div class="config-item">
           <div><strong>Modo noturno</strong><br><small>Economiza energia e reduz iluminação.</small></div>
           <label class="switch"><input type="checkbox" id="toggleDark"><span class="slider"></span></label>
         </div>
-
         <div class="config-item">
           <div><strong>Alto contraste</strong><br><small>Melhora legibilidade.</small></div>
           <label class="switch"><input type="checkbox" id="toggleContrast"><span class="slider"></span></label>
         </div>
-
         <div class="config-item">
           <div><strong>Desativar animações</strong><br><small>Reduz movimento para acessibilidade.</small></div>
           <label class="switch"><input type="checkbox" id="toggleReduceMotion"><span class="slider"></span></label>
@@ -93,18 +129,21 @@
 
         <label class="label-small">Mensagem</label>
         <textarea id="fbMessage" maxlength="300" placeholder="Nos conte sua sugestão ou problema..."></textarea>
+
         <div class="fb-row">
           <small id="charCount">0 / 300</small>
-          <button id="sendFeedback" class="btn small"><i class="fa-solid fa-paper-plane"></i> Enviar</button>
+          <button id="sendFeedback" class="btn small">
+            <i class="fa-solid fa-paper-plane"></i> Enviar
+          </button>
         </div>
 
         <div id="fbStatus" class="fb-status" aria-live="polite"></div>
       </div>
+
     </div>
 
-      <div class="panel-footer">
-        <small>Suporte: <a href="mailto:suporte@reserveforclass.com">suporte@reserveforclass.com</a></small>
-      </div>
+    <div class="panel-footer">
+      <small>Suporte: <a href="mailto:suporte@reserveforclass.com">suporte@reserveforclass.com</a></small>
     </div>
   </aside>
 

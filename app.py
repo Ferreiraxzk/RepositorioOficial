@@ -33,7 +33,7 @@ class Kits(db.Model):
     IDchromebooks = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
     nome= db.Column(db.String(25), nullable=False)
     quantidade= db.Column(db.Integer, nullable=False)
-
+    agendamentos = db.relationship("Agendamento", backref="kit", lazy=True)
 class Agendamento(db.Model):
     __tablename__='agendamentos'
     IDagendamentos = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -107,6 +107,30 @@ def registrarUsuario():
         return redirect(url_for('registrar'))
 
 
+#VALIDAR LOGIN_____________________________
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        senha = request.form.get('senha')
+        
+        user = Usuario.query.filter_by(email=email).first()
+        session['nome'] = user.login
+        if user and user.senha == senha:
+        
+
+            return redirect(url_for('inicio'))  
+        else:
+            return render_template('login.html', erro="Email ou senha incorretos")
+    
+    return render_template('login.html')
+
+
+
+
+
+
+
 #CADASTRAR KITS_____________________________
 @app.route('/registrar/kits', methods=['POST'])
 def CadastrarKit():
@@ -137,44 +161,26 @@ def CadastrarKit():
 
 
 
-#VALIDAR LOGIN_____________________________
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        email = request.form.get('email')
-        senha = request.form.get('senha')
-        
-        user = Usuario.query.filter_by(email=email).first()
-        session['nome'] = user.login
-        if user and user.senha == senha:
-        
-
-            return redirect(url_for('inicio'))  
-        else:
-            return render_template('login.html', erro="Email ou senha incorretos")
-    
-    return render_template('login.html')
 
 
 
-
-from datetime import datetime
-
+#rota de cadastro de agendamentos
 @app.route('/registrar/agendamentos', methods=['POST'])
 def CadastrarAgendar():
     professor = request.form.get('professor')
     turma = request.form.get('turma')
-    data = request.form.get('data')
-    horario = request.form.get('horario')  
+    data_str = request.form.get('data')
+    horario_raw = request.form.get('horario')
     quantidade = request.form.get('quantidade_agendar')
     kit = request.form.get('kit')
 
-    # separa os horários
-    inicio_str, fim_str = horario.split("|")
+    # separar horario inicio e fim
+    inicio_str, fim_str = horario_raw.split("|")
 
-    
     horario_inicio = datetime.strptime(inicio_str, "%H:%M").time()
     horario_fim = datetime.strptime(fim_str, "%H:%M").time()
+
+    data = datetime.strptime(data_str, "%Y-%m-%d").date()
 
     novo = Agendamento(
         professor=professor,
@@ -182,18 +188,50 @@ def CadastrarAgendar():
         data=data,
         horario_inicio=horario_inicio,
         horario_fim=horario_fim,
-        quantidade=quantidade,
-        IDchromebooks=kit,
-        iDusuario=session.get("id_usuario")
+        quantidade=int(quantidade),
+        IDchromebooks=int(kit),
+        iDusuario=1     # depois coloque o usuário logado
     )
 
     db.session.add(novo)
     db.session.commit()
 
     flash("Agendamento criado com sucesso!", "success")
-    return redirect(url_for('meusagendamentos'))
+    return redirect(url_for("meusagendamentos"))
 
 
+
+
+
+#rota de excluir agendamento
+@app.route('/agendamento/excluir/<int:id>', methods=['POST'])
+def excluir_agendamento(id):
+    agendamento = Agendamento.query.get_or_404(id)
+
+    db.session.delete(agendamento)
+    db.session.commit()
+
+    flash("Agendamento excluído com sucesso!", "success")
+    return redirect(url_for("meusagendamentos"))
+
+
+
+
+
+#rota de excluir kit
+@app.route("/kits/excluir/<int:id>", methods=["POST"])
+def excluir_kit(id):
+    kit = Kits.query.get_or_404(id)
+
+    try:
+        db.session.delete(kit)
+        db.session.commit()
+        flash("Kit excluído com sucesso!", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Erro ao excluir kit: {e}", "danger")
+
+    return redirect(url_for("kits"))  # Certifique-se de que existe uma rota chamada "kits"
 
 
 
@@ -221,9 +259,12 @@ def inicial():
     return render_template('index.html')
 
 
-@app.route('/kits')
-def kit():
-    return render_template('kits.html')
+
+@app.route("/kits")
+def kits():
+    lista_kits = Kits.query.all()
+    return render_template("kits.html", kits=lista_kits)
+
 
 
 
@@ -259,12 +300,10 @@ def agendar():
     return render_template('agendar.html', kits=kits)
 
     
-
-
-
 @app.route('/meusagendamentos')
 def meusagendamentos():
-    return render_template('meusagendamentos.html')
+    agendamentos = Agendamento.query.all()
+    return render_template("meusagendamentos.html", agendamentos=agendamentos)
 
 
 

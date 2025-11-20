@@ -2,7 +2,6 @@ const panel = document.getElementById("configPanel");
 const overlay = document.getElementById("overlay");
 const openConfig = document.getElementById("openConfig");
 const closeConfig = document.getElementById("closeConfig");
-const lista = document.getElementById("listaAgendamentos");
 const toast = document.getElementById("toast");
 
 // === Abrir/Fechar painel ===
@@ -26,26 +25,7 @@ function showToast(msg) {
 }
 
 
-// === Funções dos botões ===
-function novoAgendamento() {
-  window.location.href = "/agendar";
-}
 
-function excluirAgendamento(i) {
-  const agendamentos = JSON.parse(localStorage.getItem("rf_agendamentos") || "[]");
-  agendamentos.splice(i, 1);
-  localStorage.setItem("rf_agendamentos", JSON.stringify(agendamentos));
-  carregarAgendamentos();
-  showToast("Agendamento removido!");
-}
-
-function excluirTodos() {
-  if (confirm("Tem certeza que deseja excluir todos os agendamentos?")) {
-    localStorage.removeItem("rf_agendamentos");
-    carregarAgendamentos();
-    showToast("Todos os agendamentos foram excluídos.");
-  }
-}
 
 // === Configurações ===
 const toggleDark = document.getElementById("toggleDark");
