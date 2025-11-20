@@ -27,6 +27,7 @@
       <a href="/inicio" class="nav-btn"><i class="fa-solid fa-house"></i> Início</a>
       <a href="/agendar" class="nav-btn active"><i class="fa-solid fa-calendar-plus"></i> Agendar</a>
       <a href="/meusagendamentos" class="nav-btn"><i class="fa-solid fa-list-check"></i> Meus Agendamentos</a>
+      <a href="/kits" class="nav-btn"><i class="fa-solid fa-laptop"></i> Kits</a>
       <button id="openConfig" class="nav-btn"><i class="fa-solid fa-gear"></i> Configurações</button>
     </nav>
   </header>
@@ -40,12 +41,12 @@
     <section class="form-card">
       <h2><i class="fa-solid fa-calendar-plus"></i> Agendar Chromebook</h2>
 
-      <form id="agendarForm">
+      <form id="agendarForm" action="/registrar/agendamentos" method="POST">
         <label>Professor</label>
-        <input type="text" id="professor" placeholder="Digite o nome do professor" required>
+        <input type="text" id="professor" name="professor" placeholder="Digite o nome do professor" required>
 
         <label>Turma</label>
-        <select id="turma" required>
+        <select id="turma" name="turma" required>
           <option value="">Selecione a turma</option>
           <option>6º A</option>
           <option>6º B</option>
@@ -58,22 +59,32 @@
         </select>
 
         <label>Data</label>
-        <input type="date" id="data" required>
+        <input type="date" id="data" name="data" required>
 
         <label>Horário</label>
-        <select id="horario" required>
+        <select name="horario" id="horario" required>
           <option value="">Selecione o horário</option>
-          <option>07:00 - 08:00</option>
-          <option>08:00 - 09:00</option>
-          <option>09:00 - 10:00</option>
-          <option>10:00 - 11:00</option>
-          <option>13:00 - 14:00</option>
-          <option>14:00 - 15:00</option>
-          <option>15:00 - 16:00</option>
+          <option value="07:00|08:00">07:00 - 08:00</option>
+          <option value="08:00|09:00">08:00 - 09:00</option>
+          <option value="09:00|10:00">09:00 - 10:00</option>
+          <option value="10:00|11:00">10:00 - 11:00</option>
+          <option value="13:00|14:00">13:00 - 14:00</option>
+          <option value="14:00|15:00">14:00 - 15:00</option>
+          <option value="15:00|16:00">15:00 - 16:00</option>
+      </select>
+      
+
+        
+        <label>Kit</label>
+        <select id="kit" name="kit" required>
+          <option value="">Selecione o kit</option>
+          {% for k in kits %}
+          <option value="{{ k.IDchromebooks }}">{{ k.nome }} ({{ k.quantidade }} unidades)</option>
+          {% endfor %}
         </select>
 
         <label>Quantidade</label>
-        <input type="number" id="quantidade" min="1" max="35" value="1" required>
+        <input type="number" id="quantidade" name="quantidade_agendar" min="1" max="35" value="1" required>
 
         <button type="submit" class="btn primary full"><i class="fa-solid fa-check"></i> Confirmar agendamento</button>
       </form>

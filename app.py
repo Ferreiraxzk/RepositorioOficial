@@ -18,8 +18,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
 
 
 
-
-
 db=SQLAlchemy(app)
 
 class Usuario(db.Model):
@@ -32,19 +30,22 @@ class Usuario(db.Model):
 
 class Kits(db.Model):
     __tablename__='kits_chromebooks'
-    idchromebooks = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
+    IDchromebooks = db.Column(db.Integer, primary_key=True, autoincrement=True, unique=True)
     nome= db.Column(db.String(25), nullable=False)
     quantidade= db.Column(db.Integer, nullable=False)
 
-#class Agendamento(db.Model):
-    ##IDagendamentos = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    #IDusuario = db.Column(db.Integer, db.ForeignKey('usuario.IDusuario'), nullable=False)  
-    #IDchromebooks = db.Column(db.Integer, db.ForeignKey('kits_chromebooks.IDchromebooks'), nullable=False)  
-    #professor = db.Column(db.String(45), nullable=False)
-    #turma = db.Column(db.String(10), nullable=False, unique=True)  
-    #data = db.Column(db.Date, nullable=False)
-    #horario = db.Column(db.Time, nullable=False, unique=True)  
-    #quantidade = db.Column(db.Integer, nullable=False)  
+class Agendamento(db.Model):
+    __tablename__='agendamentos'
+    IDagendamentos = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    iDusuario = db.Column(db.Integer, db.ForeignKey('usuario.IDusuario'), nullable=False)
+    IDchromebooks = db.Column(db.Integer, db.ForeignKey('kits_chromebooks.IDchromebooks'), nullable=False)
+    professor = db.Column(db.String(45), nullable=False)
+    turma = db.Column(db.String(10), nullable=False)  
+    data = db.Column(db.Date, nullable=False)
+    horario_inicio = db.Column(db.Time, nullable=False)
+    horario_fim = db.Column(db.Time, nullable=False)
+    quantidade = db.Column(db.Integer, nullable=False)
+  
 
 
 
@@ -53,7 +54,7 @@ class Kits(db.Model):
 def admin_required(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        uid = session.get('usuario_id')
+        uid = session.get('IDusuario')
         if not uid:
             flash('Faça login para continuar.', 'warning')
             return redirect(url_for('login'))
@@ -61,7 +62,7 @@ def admin_required(f):
         # Exige que o usuário seja 'adm' e que a senha cadastrada também seja 'adm'
         if not user or user.login != 'adm' or user.senha != 'adm':
             flash('Acesso restrito ao administrador.', 'danger')
-            return redirect(url_for('home'))
+            return redirect(url_for('inicio'))
         return f(*args, **kwargs)
     return wrapper
 
@@ -129,7 +130,7 @@ def CadastrarKit():
 
     except Exception as e:
         db.session.rollback()
-        print(f"[DEBUG] Erro geral: {e}")
+        print(f"[DEBUG] Erro ao cadastrar kit: {e}")
         flash(f'Erro ao cadastrar: {str(e)}', 'danger')
         return redirect(url_for('inicio'))
 
@@ -153,6 +154,52 @@ def login():
             return render_template('login.html', erro="Email ou senha incorretos")
     
     return render_template('login.html')
+
+
+
+
+from datetime import datetime
+
+@app.route('/registrar/agendamentos', methods=['POST'])
+def CadastrarAgendar():
+    professor = request.form.get('professor')
+    turma = request.form.get('turma')
+    data = request.form.get('data')
+    horario = request.form.get('horario')  
+    quantidade = request.form.get('quantidade_agendar')
+    kit = request.form.get('kit')
+
+    # separa os horários
+    inicio_str, fim_str = horario.split("|")
+
+    
+    horario_inicio = datetime.strptime(inicio_str, "%H:%M").time()
+    horario_fim = datetime.strptime(fim_str, "%H:%M").time()
+
+    novo = Agendamento(
+        professor=professor,
+        turma=turma,
+        data=data,
+        horario_inicio=horario_inicio,
+        horario_fim=horario_fim,
+        quantidade=quantidade,
+        IDchromebooks=kit,
+        iDusuario=session.get("id_usuario")
+    )
+
+    db.session.add(novo)
+    db.session.commit()
+
+    flash("Agendamento criado com sucesso!", "success")
+    return redirect(url_for('meusagendamentos'))
+
+
+
+
+
+
+
+
 
 
 #ROTA PARA FAZER BUTÃO SAIR DESLOGAR_____________________________
@@ -204,9 +251,14 @@ def codigo():
 def inicio():
     return render_template('inicio.html')
    
+
+
 @app.route('/agendar')
 def agendar():
-    return render_template('agendar.html')
+    kits = Kits.query.all()
+    return render_template('agendar.html', kits=kits)
+
+    
 
 
 

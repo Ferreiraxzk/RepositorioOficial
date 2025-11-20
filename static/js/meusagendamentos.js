@@ -25,30 +25,6 @@ function showToast(msg) {
   setTimeout(() => toast.classList.remove("show"), 2500);
 }
 
-// === Carregar agendamentos ===
-function carregarAgendamentos() {
-  const agendamentos = JSON.parse(localStorage.getItem("rf_agendamentos") || "[]");
-  lista.innerHTML = "";
-
-  if (agendamentos.length === 0) {
-    lista.innerHTML = '<p class="vazio">Nenhum agendamento cadastrado.</p>';
-    return;
-  }
-
-  agendamentos.forEach((a, i) => {
-    const div = document.createElement("div");
-    div.classList.add("agendamento-item");
-    div.innerHTML = `
-      <h3><i class="fa-solid fa-chalkboard-user"></i> ${a.professor}</h3>
-      <p><strong>Turma:</strong> ${a.turma}</p>
-      <p><strong>Data:</strong> ${a.data}</p>
-      <p><strong>Horário:</strong> ${a.horario}</p>
-      <p><strong>Quantidade:</strong> ${a.quantidade}</p>
-      <button class="btn excluir" onclick="excluirAgendamento(${i})"><i class="fa-solid fa-trash"></i> Excluir</button>
-    `;
-    lista.appendChild(div);
-  });
-}
 
 // === Funções dos botões ===
 function novoAgendamento() {

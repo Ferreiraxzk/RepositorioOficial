@@ -63,30 +63,3 @@ toggleReduceMotion?.addEventListener('change', e => {
   showToast(e.target.checked ? 'Animações reduzidas' : 'Animações ativadas');
 });
 
-// ---------- FORMULÁRIO ----------
-const form = document.getElementById('agendarForm');
-
-form?.addEventListener('submit', (e) => {
-  e.preventDefault();
-
-  const professor = document.getElementById('professor').value.trim();
-  const turma = document.getElementById('turma').value;
-  const data = document.getElementById('data').value;
-  const horario = document.getElementById('horario').value;
-  const quantidade = document.getElementById('quantidade').value;
-
-  if (!professor || !turma || !data || !horario) {
-    showToast('Preencha todos os campos antes de confirmar.');
-    return;
-  }
-
-  const novoAgendamento = { professor, turma, data, horario, quantidade };
-
-  // Carrega, adiciona e salva
-  const agendamentos = JSON.parse(localStorage.getItem('rf_agendamentos') || '[]');
-  agendamentos.unshift(novoAgendamento);
-  localStorage.setItem('rf_agendamentos', JSON.stringify(agendamentos));
-
-  showToast('Agendamento confirmado com sucesso!');
-  form.reset();
-});
