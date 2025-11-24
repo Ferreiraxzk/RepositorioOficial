@@ -20,6 +20,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
 
 db=SQLAlchemy(app)
 
+
+
+#USE projeto; no sql
 class Usuario(db.Model):
     __tablename__='usuario'
     IDusuario = db.Column(db.Integer, primary_key=True, autoincrement=True)
