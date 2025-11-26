@@ -7,22 +7,27 @@
   <link rel="stylesheet" href="../static/css/meusagendamentos.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
 </head>
 <body>
 
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="nav-left">
-      <img src="../static/assets/img/logo branca.png" class="logo" alt="Logo">
       <h1>ReserveForClass</h1>
     </div>
     <nav class="nav-links">
       <a href="/inicio" class="nav-btn"><i class="fa-solid fa-house"></i> Início</a>
+      {% if session.get('perfil') == 'professor' %}
       <a href="/agendar" class="nav-btn"><i class="fa-solid fa-calendar-plus"></i> Agendar</a>
-      <a href="/meusagendamentos" class="nav-btn active"><i class="fa-solid fa-list-check"></i> Meus Agendamentos</a>
+      <a href="/meusagendamentos" class="nav-btn {% if titulo == 'Meus Agendamentos' %}active{% endif %}"><i class="fa-solid fa-list-check"></i> Meus Agendamentos</a>
+      {% endif %}
+      <a href="/agendamentos" class="nav-btn {% if titulo == 'Agendamentos' %}active{% endif %}"><i class="fa-solid fa-list"></i> Agendamentos</a>
+      {% if session.get('perfil') == 'adm' %}
       <a href="/kits" class="nav-btn"><i class="fa-solid fa-laptop"></i> Kits</a>
-      
+      {% endif %}
       <button id="openConfig" class="nav-btn"><i class="fa-solid fa-gear"></i> Configurações</button>
+      <a href="/logout" class="nav-btn"><i class="fa fa-sign-out"></i> Sair</a>
     </nav>
   </header>
 
@@ -34,13 +39,30 @@
     </button>
 
     <section class="agendamentos-card">
-      <h2><i class="fa-solid fa-list-check"></i> Meus Agendamentos</h2>
+      <h2><i class="fa-solid fa-list-check"></i> {{ titulo or 'Meus Agendamentos' }}</h2>
+      {% with msgs = get_flashed_messages(with_categories=true) %}
+        {% if msgs %}
+          <div id="flash-messages">
+            {% for cat, msg in msgs %}
+              <p>{{ msg }}</p>
+            {% endfor %}
+          </div>
+          <script>
+            setTimeout(() => {
+              const el = document.getElementById('flash-messages');
+              if (el) el.remove();
+            }, 3000);
+          </script>
+        {% endif %}
+      {% endwith %}
 
       <!-- BOTÃO NOVO AGENDAMENTO -->
       <div class="botoes-acoes">
+        {% if session.get('perfil') == 'professor' %}
         <a href="/agendar" class="btn">
           <i class="fa-solid fa-plus"></i> Novo Agendamento
         </a>
+        {% endif %}
       </div>
 
       <div class="lista-agendamentos">

@@ -10,7 +10,7 @@
 
   
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
+  
   
   <link rel="stylesheet" href="../static/css/inicio.css">
 </head>
@@ -19,15 +19,19 @@
 
   <header class="navbar" role="navigation">
     <div class="nav-left">
-      <img src="../static/assets/img/logo branca.png" alt="ReserveForClass" class="logo" />
       <h1>ReserveForClass</h1>
     </div>
 
     <nav class="nav-links" aria-label="Menu principal">
       <a href="/inicio" class="nav-btn active"><i class="fa-solid fa-house"></i> Início</a>
+      {% if session.get('perfil') == 'professor' %}
       <a href="/agendar" class="nav-btn"><i class="fa-solid fa-calendar-plus"></i> Agendar</a>
       <a href="/meusagendamentos" class="nav-btn"><i class="fa-solid fa-list-check"></i> Meus Agendamentos</a>
+      {% endif %}
+      <a href="/agendamentos" class="nav-btn"><i class="fa-solid fa-list"></i> Agendamentos</a>
+      {% if session.get('perfil') == 'adm' %}
       <a href="/kits" class="nav-btn"><i class="fa-solid fa-laptop"></i> Kits</a>
+      {% endif %}
       <button id="openConfig" class="nav-btn" aria-haspopup="true" aria-controls="configPanel">
         <i class="fa-solid fa-gear"></i> Configurações
       </button>
@@ -42,6 +46,21 @@
   <section class="hero full" id="hero">
     <div class="hero-content">
       <h2>Bem-vindo {{ session.get('nome') }} ao sistema de agendamento <span>ReserveForClass</span></h2>
+      {% with msgs = get_flashed_messages(with_categories=true) %}
+        {% if msgs %}
+          <div id="flash-messages">
+            {% for cat, msg in msgs %}
+              <p>{{ msg }}</p>
+            {% endfor %}
+          </div>
+          <script>
+            setTimeout(() => {
+              const el = document.getElementById('flash-messages');
+              if (el) el.remove();
+            }, 3000);
+          </script>
+        {% endif %}
+      {% endwith %}
       <p>Organize o uso dos Chromebooks de forma inteligente, simples e rápida. Escolha a turma, o dia e o horário — tudo em um só lugar.</p>
 
       <div class="hero-buttons">

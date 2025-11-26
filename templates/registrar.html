@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../static/css/registrar.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   
+  
 </head>
 <body>
 
@@ -20,6 +21,15 @@
     <div class="register-box">
      
       <h2>Crie sua conta</h2>
+      {% with msgs = get_flashed_messages(with_categories=true) %}
+        {% if msgs %}
+          <div>
+            {% for cat, msg in msgs %}
+              <p>{{ msg }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
       <form id="registerForm" method="POST" action="/usuarios/registrar">
         <div class="input-group">
           <label for="nome">Nome Completo:</label>
@@ -39,6 +49,14 @@
         <div class="input-group">
           <label for="login">Nome de Usuário:</label>
           <input type="text" id="login" name="login" placeholder="Digite um nome de usuário" required>
+        </div>
+        
+        <div class="input-group">
+          <label for="perfil">Perfil:</label>
+          <select id="perfil" name="perfil" required>
+            <option value="professor">Professor</option>
+            <option value="adm">Administrador</option>
+          </select>
         </div>
         
 

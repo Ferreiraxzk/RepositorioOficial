@@ -13,22 +13,28 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="../static/css/agendar.css">
+  
 </head>
 <body>
 
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="nav-left">
-      <img src="../static/assets/img/logo branca.png" alt="ReserveForClass" class="logo" />
       <h1>ReserveForClass</h1>
     </div>
 
     <nav class="nav-links">
       <a href="/inicio" class="nav-btn"><i class="fa-solid fa-house"></i> Início</a>
+      {% if session.get('perfil') == 'professor' %}
       <a href="/agendar" class="nav-btn active"><i class="fa-solid fa-calendar-plus"></i> Agendar</a>
       <a href="/meusagendamentos" class="nav-btn"><i class="fa-solid fa-list-check"></i> Meus Agendamentos</a>
+      {% endif %}
+      <a href="/agendamentos" class="nav-btn"><i class="fa-solid fa-list"></i> Agendamentos</a>
+      {% if session.get('perfil') == 'adm' %}
       <a href="/kits" class="nav-btn"><i class="fa-solid fa-laptop"></i> Kits</a>
+      {% endif %}
       <button id="openConfig" class="nav-btn"><i class="fa-solid fa-gear"></i> Configurações</button>
+      <a href="/logout" class="nav-btn"><i class="fa fa-sign-out"></i> Sair</a>
     </nav>
   </header>
 
@@ -40,6 +46,22 @@
 
     <section class="form-card">
       <h2><i class="fa-solid fa-calendar-plus"></i> Agendar Chromebook</h2>
+
+      {% with msgs = get_flashed_messages(with_categories=true) %}
+        {% if msgs %}
+          <div id="flash-messages">
+            {% for cat, msg in msgs %}
+              <p>{{ msg }}</p>
+            {% endfor %}
+          </div>
+          <script>
+            setTimeout(() => {
+              const el = document.getElementById('flash-messages');
+              if (el) el.remove();
+            }, 3000);
+          </script>
+        {% endif %}
+      {% endwith %}
 
       <form id="agendarForm" action="/registrar/agendamentos" method="POST">
         <label>Professor</label>
