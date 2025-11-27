@@ -33,7 +33,7 @@ body{
   box-shadow:0 4px 20px rgba(0,0,0,0.12);
 }
 .nav-left{display:flex;align-items:center;gap:12px}
-.logo{height:65px;filter:brightness(0) invert(1);width:auto}
+.logo{height:50px;filter:brightness(0) invert(1);width:auto}
 .nav-links{display:flex;gap:14px;align-items:center}
 .nav-btn{
   display:inline-flex;align-items:center;gap:8px;

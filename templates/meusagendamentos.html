@@ -14,7 +14,7 @@
   <!-- NAVBAR -->
   <header class="navbar">
     <div class="nav-left">
-      <h1>ReserveForClass</h1>
+      <img src="../static/assets/img/LOGO VERSAO BRANCA.png" alt="ReserveForClass" class="logo" />
     </div>
     <nav class="nav-links">
       <a href="/inicio" class="nav-btn"><i class="fa-solid fa-house"></i> Início</a>
@@ -90,13 +90,16 @@
 
               <p><strong>Kit:</strong> {{ a.kit.nome }}</p>
 
-              <!-- BOTÃO EXCLUIR -->
+              {% if titulo == "Meus Agendamentos" or session.get('perfil') == 'adm' %}
+              <!-- BOTÃO EXCLUIR (só aparece em Meus Agendamentos) -->
               <form action="/agendamento/excluir/{{ a.IDagendamentos }}" method="POST"
-                onsubmit="return confirm('Deseja realmente excluir este agendamento?');">
-                <button class="btn excluir" type="submit">
-                  <i class="fa-solid fa-trash"></i> Excluir
-                </button>
+               onsubmit="return confirm('Deseja realmente excluir este agendamento?');">
+              <button class="btn excluir" type="submit">
+               <i class="fa-solid fa-trash"></i> Excluir
+              </button>
               </form>
+              {% endif %}
+
 
             </div>
           {% endfor %}

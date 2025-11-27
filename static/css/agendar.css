@@ -17,7 +17,7 @@ body{background:var(--cinza-claro);color:var(--texto);min-height:100vh}
 /* NAVBAR */
 .navbar{position:fixed;top:0;left:0;width:100%;padding:14px 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(59,29,143,0.92);color:#fff;backdrop-filter:blur(8px);box-shadow:0 4px 20px rgba(0,0,0,0.12);z-index:1200}
 .nav-left{display:flex;align-items:center;gap:12px}
-.logo{height:65px;filter:brightness(0) invert(1)}
+.logo{height:50px;filter:brightness(0) invert(1);width:auto}
 .nav-links{display:flex;gap:14px;align-items:center}
 .nav-btn{display:inline-flex;align-items:center;gap:8px;background:var(--roxo-claro);color:#fff;padding:8px 18px;border-radius:22px;border:2px solid var(--roxo-medio);font-weight:600;text-decoration:none;cursor:pointer;transition:all .2s ease}
 .nav-btn:hover,.nav-btn.active{background:var(--roxo-medio);transform:translateY(-3px)}

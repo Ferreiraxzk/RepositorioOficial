@@ -19,10 +19,11 @@
 
   <header class="navbar" role="navigation">
     <div class="nav-left">
-      <h1>ReserveForClass</h1>
+      <img src="../static/assets/img/LOGO VERSAO BRANCA.png" alt="ReserveForClass" class="logo" />
     </div>
 
     <nav class="nav-links" aria-label="Menu principal">
+   
       <a href="/inicio" class="nav-btn active"><i class="fa-solid fa-house"></i> Início</a>
       {% if session.get('perfil') == 'professor' %}
       <a href="/agendar" class="nav-btn"><i class="fa-solid fa-calendar-plus"></i> Agendar</a>
@@ -45,7 +46,7 @@
   
   <section class="hero full" id="hero">
     <div class="hero-content">
-      <h2>Bem-vindo {{ session.get('nome') }} ao sistema de agendamento <span>ReserveForClass</span></h2>
+      <h2>Bem-vindo {{ session.get('nome') }} ao sistema de agendamento <span>ReserveForClass.</span></h2>
       {% with msgs = get_flashed_messages(with_categories=true) %}
         {% if msgs %}
           <div id="flash-messages">

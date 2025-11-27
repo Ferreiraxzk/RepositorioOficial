@@ -25,7 +25,7 @@ body { background: var(--cinza-claro); color: var(--texto); min-height: 100vh; }
   z-index: 1000;
 }
 .nav-left { display: flex; align-items: center; gap: 12px; }
-.logo { height: 65px; filter: brightness(0) invert(1); }
+.logo{height:50px;filter:brightness(0) invert(1);width:auto}
 .nav-links { display: flex; align-items: center; gap: 12px; }
 .nav-btn {
   background: var(--roxo-claro);

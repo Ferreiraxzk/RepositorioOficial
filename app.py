@@ -35,6 +35,7 @@ class Kits(db.Model):
     nome= db.Column(db.String(25), nullable=False)
     quantidade= db.Column(db.Integer, nullable=False)
     agendamentos = db.relationship("Agendamento", backref="kit", lazy=True)
+    
 class Agendamento(db.Model):
     __tablename__='agendamentos'
     IDagendamentos = db.Column(db.Integer, primary_key=True, autoincrement=True)

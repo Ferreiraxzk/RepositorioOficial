@@ -38,6 +38,15 @@ body {
   line-height: 1.5;
 }
 
+.logo {
+  height: 250px;
+  width: 300px;
+  
+
+}
+
+
+
 /* ===== BOTÕES ===== */
 .buttons {
   display: flex;
